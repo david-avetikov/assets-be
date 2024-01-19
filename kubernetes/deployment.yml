@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: assets-be
+spec:
+  selector:
+    matchLabels:
+      app: assets-be
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: assets-be
+    spec:
+      containers:
+        - name: assets-be
+          image: gitlab.deadline.team:5005/assets/assets-be:{{ version }}
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: assets-be
+                optional: true
+          env:
+            - name: KUBERNETES_NAMESPACE
+              value: {{ namespace }}
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              memory: 200Mi
+              cpu: 200m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 60
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 2
+            timeoutSeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+      imagePullSecrets:
+        - name: regcred

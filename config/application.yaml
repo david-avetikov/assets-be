@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+database:
+  batchSize: 100
+  postgres:
+    host: postgres
+    port: 5432
+    database: assets
+    username: assets
+    password: assets
+  redis:
+    host: redis
+    port: 6379
+    minConnPerDB: 1
+    maxConnPerDB: 5
+    cacheDbId: 0
+  jaeger:
+    host: jaeger
+    port: 16686
+    collectorHost: jaeger
+    collectorPort: 14268
+
+authorizationServer:
+  encodingAlg: HS256
+  signKey: Nn+CPSUufKUb26JNRYptWacRLn6Da11Lf6RHZ5+vNYg=
+  accessTokenValiditySeconds: 86400
+  refreshTokenValiditySeconds: 604800
+
+ldap:
+  protocol: ldap
+  host: ldap.deadline.team
+  port: 389
+  baseDN: dc=deadline,dc=team
+  username: cn=admin,dc=deadline,dc=team
+  password: Deadline@777
+  searchFilter: (&(objectClass=organizationalPerson)(mail=*)(title=*))
+  searchWithSubtree: true
+  userMapping:
+    Username: uid
+    FirstName: givenName
+    LastName: sn
+    Email: mail
+    Position: title
+    PhoneNumber: mobile
+
+attachment:
+  uploadPath: /var/log
+
+logging:
+  level: info

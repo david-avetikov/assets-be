@@ -1,0 +1,7 @@
+.DS_STORE
+.idea/
+frontend/dist
+frontend/node_modules
+database
+log
+*.iml
